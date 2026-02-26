@@ -1003,10 +1003,17 @@ impl quote::ToTokens for SeedsExpr {
 
 impl syn::parse::Parse for SeedsExpr {
     fn parse(stream: syn::parse::ParseStream) -> syn::parse::Result<Self> {
+        let content;
         if stream.peek(syn::token::Bracket) {
-            let content;
             syn::bracketed!(content in stream);
-            let mut list: Punctuated<Expr, Token![,]> = content.parse_terminated(Expr::parse)?;
+        }else if stream.peek(syn::token::Paren) {
+            syn::parenthesized!(content in stream);
+        } else if stream.peek(syn::token::Brace) {
+            syn::braced!(content in stream);
+        } else {
+            return Ok(SeedsExpr::Expr(Box::new(stream.parse()?)))
+        }
+        let mut list: Punctuated<Expr, Token![,]> = content.parse_terminated(Expr::parse)?;
 
             // Strip a trailing comma if present.
             // Use `pop_punct` when we update to syn 2.0
@@ -1015,9 +1022,6 @@ impl syn::parse::Parse for SeedsExpr {
             }
 
             Ok(SeedsExpr::List(list))
-        } else {
-            Ok(SeedsExpr::Expr(Box::new(stream.parse()?)))
-        }
     }
 }
 

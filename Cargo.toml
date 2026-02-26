@@ -7,7 +7,7 @@ members = [
     "lang",
     "lang/attribute/*",
     "lang/derive/*",
-    "lang/syn",
+    "lang/syn", "program",
     "spl",
 ]
 exclude = ["tests/cfo/deps/openbook-dex", "tests/swap/deps/openbook-dex"]

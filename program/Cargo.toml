@@ -1,0 +1,14 @@
+[package]
+name = "program"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+anchor-lang = { path = "../lang", features = [
+    "derive",
+    "event-cpi",
+    "idl-build",
+    "anchor-debug",
+    "init-if-needed",
+    "allow-missing-optionals",
+] }
